@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{title}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <ul class="list-unstyled" *ngFor="let lng of languages" (click)="select(lng.value)">
+    <div *ngIf="lng.enabled">
+      <li class="media">
+        <img [src]="lng.img" class="mr-2 img-thumbnail" alt="lng.text">
+        <div class="media-body">
+          <h5 class="mt-0 mb-1">{{ lng.text }}</h5>
+          {{ lng.subtext }}
+        </div>
+      </li>
+    </div>
+  </ul>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">{{closeBtnName}}</button>
+</div>

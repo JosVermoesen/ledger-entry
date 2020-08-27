@@ -1,0 +1,19 @@
+<ul class="list-group" *ngIf="loaded && ledgerItems.length > 0">
+  <li *ngFor="let ledgerItem of ledgerItems" [class.list-group-item-secondary]="selectedLedgerItem === ledgerItem"
+    class="list-group-item d-flex justify-content-between align-items-center">
+    <a (click)="onSelect(ledgerItem)" href="#">{{ ledgerItem.dcOption }}: {{ ledgerItem.bNumber }}</a>
+    <a>{{ ledgerItem.tNumber }}</a>
+    <div [ngStyle]="{'color':getColor(ledgerItem.dcOption)}">
+      <span>{{ ledgerItem.amount | currency:'EUR' }}</span>
+    </div>
+    <i (click)="onDelete(ledgerItem)" class="fa fa-remove"></i>
+  </li>
+</ul>
+
+<div *ngIf="loaded && ledgerItems.length == 0">
+  <h5>There are no journalentries</h5>
+</div>
+
+<div *ngIf="!loaded">
+  <h5>Loading session...</h5>
+</div>

@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left text-danger">{{title}} - '{{typeCookiesAndPrivacy}}' geselecteerd</h5>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="container mt-2">
+    <section id="accordeon">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <button (click)="onAcceptPrivacy()" type="submit" class="btn btn-danger">Ok</button>
+            <button (click)="onPrivacy()" type="submit" class="btn btn-success ml-1">Meer info</button>
+          </div>
+        </div>
+
+        <accordion class="py-1" [isAnimated]="true" [closeOthers]="accordeonOneAtATime">
+          <accordion-group heading="2: Optimaal" (isOpenChange)="logSelected('2')">
+            <div class="text-left">
+              <div class="card border-primary mb-resp">
+                <div class="card-body">
+                  <p>Voor relevante informatie op deze site en social media, plaatsen we cookies zodat:
+                  </p>
+                  <ol>
+                    <li>Onze website goed werkt en gebruiksvriendelijk is</li>
+                    <li>We de website kunnen verbeteren</li>
+                    <li>We u informatie en serviceberichten kunnen tonen op basis van de gegevens die wij van u hebben
+                      en de manier waarop u de website gebruikt</li>
+                    <li>Social media integratie (videos, deelbuttons) mogelijk is</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </accordion-group>
+
+          <accordion-group heading="1: Basis" (isOpenChange)="logSelected('1')" [isOpen]="accordeonBasicOpen">
+            <div class="text-left">
+              <div class="card border-primary mb-resp">
+                <div class="card-body">
+                  Voor een aangepaste website met alle nodige functies:
+                  <ol>
+                    <li>Onze website werkt gebruiksvriendelijk</li>
+                    <li>We kunnen de website verbeteren</li>
+                    <li>We kunnen u informatie en serviceberichten tonen op basis van de gegevens die wij van u hebben
+                      en de manier waarop u de website gebruikt</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </accordion-group>
+
+          <accordion-group heading="0: Noodzakelijk" (isOpenChange)="logSelected('0')">
+            <div class="text-left">
+              <div class="card border-primary mb-resp">
+                <div class="card-body">
+                  Voor een website met alle basisfuncties:
+                  <ol>
+                    <li>Onze website werkt goed en gebruiksvriendelijk</li>
+                    <li>We kunnen de website verbeteren</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </accordion-group>
+
+        </accordion>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- <div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">{{closeBtnName}}</button>
+</div> -->
