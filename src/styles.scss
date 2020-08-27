@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/css/font-awesome.min.css';
+@import '~ngx-bootstrap//datepicker//bs-datepicker.css';
+
+/* Bootstrap 4.x default */
+/* html {
+  font-size: 16px;
+} */
+
+/* Bootstrap 4.x small */
+html {
+  font-size: 14px;
+}

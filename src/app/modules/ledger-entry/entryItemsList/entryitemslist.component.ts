@@ -1,6 +1,6 @@
-import { LedgerEntryService } from '../../../_services/ledgerentry.service';
 import { Component, OnInit } from '@angular/core';
-import { ILedgerEntryItem } from '../../../_models/ledgerEntryItem';
+import { ILedgerEntryItem } from '../models/ledgerEntryItem';
+import { LedgerEntryService } from '../services/ledgerentry.service';
 
 @Component({
   selector: 'app-entryitemslist',
@@ -13,7 +13,7 @@ export class EntryItemsListComponent implements OnInit {
 
   loaded = false;
 
-  constructor(private ledgerEntryService: LedgerEntryService) {}
+  constructor(private ledgerEntryService: LedgerEntryService) { }
 
   ngOnInit() {
     this.ledgerEntryService.stateClear.subscribe(clear => {
