@@ -4,6 +4,6 @@ export interface ILedgerEntryItem {
   amount: number;
   bNumber: string; // booking number
   tNumber?: string; // t booking number
-  description: string;
-  date: any;
+  description?: string;
+  date?: any;
 }

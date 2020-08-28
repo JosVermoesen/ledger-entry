@@ -1,4 +1,4 @@
-export function Uuid() {
+export function Guid() {
   let uuidValue = '';
   let k: number;
   let randomValue: number;
