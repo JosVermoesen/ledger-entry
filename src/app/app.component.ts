@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RedisLedgerService } from './modules/ledger-entry/services/redisledger.service';
+import { BasketService } from './modules/ledger-entry/services/basket.service';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +8,13 @@ import { RedisLedgerService } from './modules/ledger-entry/services/redisledger.
 })
 export class AppComponent implements OnInit {
 
-  constructor(private redisLedgerService: RedisLedgerService) {}
+  constructor(private basketService: BasketService) {}
 
   ngOnInit(): void {
     // check open sessions for redis used with the browser used
     const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
     if (ledgerEntryId) {
-      this.redisLedgerService.getLedgerEntry(ledgerEntryId)
+      this.basketService.getLedgerEntry(ledgerEntryId)
         .subscribe(() => {
           console.log('initialised ledgerEntry');
         }, error => {

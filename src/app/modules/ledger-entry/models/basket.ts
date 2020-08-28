@@ -1,4 +1,4 @@
-import { Guid } from '../functions/uuid';
+import { Guid } from '../../../shared/functions/uuid';
 
 export interface IBasket {
   id: string;

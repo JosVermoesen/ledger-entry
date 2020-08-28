@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ILedgerEntryItem } from '../models/ledgerEntryItem';
 import { LedgerEntryService } from '../services/ledgerentry.service';
+import { Observable } from 'rxjs';
+import { IBasket, Basket } from 'src/app/modules/ledger-entry/models/basket';
+import { BasketService } from '../services/basket.service';
 
 @Component({
   selector: 'app-entryitemslist',
@@ -12,10 +15,15 @@ export class EntryItemsListComponent implements OnInit {
   selectedLedgerItem: ILedgerEntryItem;
 
   loaded = false;
+  basket$: Observable<IBasket>;
 
-  constructor(private ledgerEntryService: LedgerEntryService) { }
+  constructor(
+    private basketService: BasketService,
+    private ledgerEntryService: LedgerEntryService) { }
 
   ngOnInit() {
+    this.basket$ = this.basketService.basket$;
+
     this.ledgerEntryService.stateClear.subscribe(clear => {
       if (clear) {
         this.selectedLedgerItem = {
@@ -39,11 +47,14 @@ export class EntryItemsListComponent implements OnInit {
   }
 
   onSelect(item: ILedgerEntryItem) {
-    this.ledgerEntryService.setFormLedgerEntry(item);
-    this.selectedLedgerItem = item;
+    console.log(item);
+
+    /* this.ledgerEntryService.setFormLedgerEntry(item);
+    this.selectedLedgerItem = item; */
   }
 
   onDelete(item: ILedgerEntryItem) {
+    console.log(item);
     if (confirm('Are you sure?')) {
       this.ledgerEntryService.deleteLedgerEntryItem(item);
     }

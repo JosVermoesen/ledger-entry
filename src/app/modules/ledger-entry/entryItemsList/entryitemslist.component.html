@@ -1,4 +1,26 @@
-<ul class="list-group" *ngIf="loaded && ledgerItems.length > 0">
+<div *ngIf="(basket$ | async) === null">
+  <p>There are no journalentries</p>
+</div>
+
+<div *ngIf="(basket$ | async) as basket">
+  <ul class="list-group">
+    <li *ngFor="let ledgerItem of basket.items" [class.list-group-item-secondary]="selectedLedgerItem === ledgerItem"
+      class="list-group-item d-flex justify-content-between align-items-center">
+      <a (click)="onSelect(ledgerItem)" href="#">{{ ledgerItem.dcOption }}: {{ ledgerItem.account }}</a>
+      <a>{{ ledgerItem.tAccount }}</a>
+      <div [ngStyle]="{'color':getColor(ledgerItem.dcOption)}">
+        <span>{{ ledgerItem.amount | currency:'EUR' }}</span>
+      </div>
+      <i (click)="onDelete(ledgerItem)" class="fa fa-remove"></i>
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="!loaded">
+  <h5>Loading session...</h5>
+</div>
+
+<!-- <ul class="list-group" *ngIf="loaded && ledgerItems.length > 0">
   <li *ngFor="let ledgerItem of ledgerItems" [class.list-group-item-secondary]="selectedLedgerItem === ledgerItem"
     class="list-group-item d-flex justify-content-between align-items-center">
     <a (click)="onSelect(ledgerItem)" href="#">{{ ledgerItem.dcOption }}: {{ ledgerItem.bNumber }}</a>
@@ -16,4 +38,4 @@
 
 <div *ngIf="!loaded">
   <h5>Loading session...</h5>
-</div>
+</div> -->

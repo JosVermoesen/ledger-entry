@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ILedgerEntryItem } from './models/ledgerEntryItem';
 import { LedgerEntryService } from './services/ledgerentry.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { RedisLedgerService } from './services/redisledger.service';
+import { BasketService } from './services/basket.service';
 import { Guid } from '../../shared/functions/uuid';
 
 @Component({
@@ -32,7 +32,7 @@ export class LedgerEntryComponent implements OnInit {
   countEntries: number;
 
   constructor(
-    private redisLedgerService: RedisLedgerService,
+    private basketService: BasketService,
     private ledgerEntryService: LedgerEntryService,
     private fb: FormBuilder
   ) {}
@@ -121,8 +121,9 @@ export class LedgerEntryComponent implements OnInit {
         {},
         this.ledgerEntryForm.value
       );
-      // console.log(journalEntry);
-      this.redisLedgerService.addItemToBasket(journalEntry, this.descriptionAsHeader, this.dateAsHeader, -1);
+
+      console.log(journalEntry);
+      this.basketService.addItemToBasket(journalEntry, this.descriptionAsHeader, this.dateAsHeader, -1);
       if (this.isNew) {
         this.ledgerEntryService.addLedgerEntryItem(journalEntry);
       } else {

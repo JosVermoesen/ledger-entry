@@ -4,13 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IBasket, IBasketItem, Basket } from '../../../shared/models/redisLedgerEntry';
+import { IBasket, IBasketItem, Basket } from '../models/basket';
 import { ILedgerEntryItem } from '../models/ledgerEntryItem';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RedisLedgerService {
+export class BasketService {
   baseUrl = environment.apiUrl;
   private entrySource = new BehaviorSubject<IBasket>(null);
   basket$ = this.entrySource.asObservable();
