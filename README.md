@@ -1,27 +1,45 @@
-# LedgerEntry
+# Ledger Entry
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.5.
+## Getting started for developers
 
-## Development server
+- [Install NodeJS](https://nodejs.org/). Hint: eventually install and use [nvm](https://medium.com/@Joachim8675309/installing-node-js-with-nvm-4dc469c977d9) for easy installing and/or switching between node versions
+- Clone this repository: `git clone https://github.com/JosVermoesen/ledgerentry.git`.
+- Run `npm install` inside the project root.
+- Run `ng serve` in a terminal from the project root.
+- Profit. :tada:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Development Tools used for app
 
-## Code scaffolding
+- [NodeJS](https://nodejs.org/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Angular CLI](https://www.npmjs.com/package/@angular/cli): `npm i -g @angular/cli`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## NPM packages used for this app
 
-## Build
+- [bootstrap](https://www.npmjs.com/package/bootstrap): `npm i bootstrap`
+- [ngx-bootstrap](https://www.npmjs.com/package/ngx-bootstrap): `npm i ngx-bootstrap` (or greater)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## styles.scss
 
-## Running unit tests
+For use of primeNG, Icons and Flex, add into your global styles.scss:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/css/font-awesome.min.css';
+@import '~ngx-bootstrap//datepicker//bs-datepicker.css';
+```
 
-## Running end-to-end tests
+## Best practices: use lazy loading modules
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- Generate modules ex. an a home module: `ng generate module pages/home --route home --module app.module`
+- Generate modules ex. a contact module: `ng generate module pages/contact --route contact --module app.module`
 
-## Further help
+## Updating Angular 10
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This app is on Angular 10.
+Before starting an update to a later version, you always have to commit first
+
+updating within latest Angular 10:
+`ng update @angular/cli@10 @angular/core@10`
+
+Follow the instructions eventualy for fixes
