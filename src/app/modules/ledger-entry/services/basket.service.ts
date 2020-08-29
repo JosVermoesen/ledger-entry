@@ -5,15 +5,14 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IBasket, IBasketItem, Basket } from '../models/basket';
-import { ILedgerEntryItem } from '../models/ledgerEntryItem';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BasketService {
   baseUrl = environment.apiUrl;
-  private entrySource = new BehaviorSubject<IBasket>(null);
-  basket$ = this.entrySource.asObservable();
+  private basketSource = new BehaviorSubject<IBasket>(null);
+  basket$ = this.basketSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +20,7 @@ export class BasketService {
     return this.http.get(this.baseUrl + 'ledgerentry?id=' + id)
       .pipe(
         map((basket: IBasket) => {
-          this.entrySource.next(basket);
+          this.basketSource.next(basket);
           console.log(this.getCurrentBasketValue());
         })
       );
@@ -30,7 +29,7 @@ export class BasketService {
   setBasket(basket: IBasket) {
     return this.http.post(this.baseUrl + 'ledgerentry', basket)
       .subscribe((response: IBasket) => {
-        this.entrySource.next(response);
+        this.basketSource.next(response);
         console.log(response);
       }, error => {
         console.log(error);
@@ -38,7 +37,7 @@ export class BasketService {
   }
 
   getCurrentBasketValue() {
-    return this.entrySource.value;
+    return this.basketSource.value;
   }
 
   addItemToBasket(item: IBasketItem, description: string, entryDate: Date, cubeControl: number) {
@@ -78,5 +77,26 @@ export class BasketService {
       account: item.account,
       tAccount: item.tAccount
     }
+  }
+
+  removeItemFromBasket(item: IBasketItem) {
+    const basket = this.getCurrentBasketValue();
+    if (basket.items.some(x => x.id === item.id)) {
+      basket.items = basket.items.filter(i => i.id !== item.id);
+      if (basket.items.length > 0) {
+        this.setBasket(basket);
+      } else {
+        this.deleteBasket(basket);
+      }
+    }
+  }
+
+  deleteBasket(basket: IBasket) {
+    return this.http.delete(this.baseUrl + 'ledgerentry?id=' + basket.id).subscribe(() => {
+      this.basketSource.next(null);
+      localStorage.removeItem('ledgerEntry_id');
+    }, error => {
+      console.log(error);
+    });
   }
 }

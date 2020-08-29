@@ -96,22 +96,8 @@ export class LedgerEntryComponent implements OnInit {
       const entryDate = this.ledgerEntryHeaderForm.value.date;
       this.basketService.addItemToBasket(basketItem, entryDescription, entryDate, -1);
       this.refreshBasket();
-
-      /* if (this.isNew) {
-        this.ledgerEntryService.addLedgerEntryItem(journalEntry);
-      } else {
-        if (journalEntry.dcOption === 'T' && journalEntry.tNumber === null) {
-          this.warning =
-            'no contra account given when changing... No changes made!';
-        } else {
-          this.ledgerEntryService.updateLedgerEntryItem(journalEntry);
-        }
-      } */
     }
-
-    // Clear state
     this.clearState();
-    // this.ngOnInit();
   }
 
   clearState() {
@@ -182,7 +168,6 @@ export class LedgerEntryComponent implements OnInit {
 
   onSelect(item: IBasketItem) {
     console.log(item);
-
     /* this.ledgerEntryService.setFormLedgerEntry(item);
     this.selectedLedgerItem = item; */
   }
@@ -190,7 +175,8 @@ export class LedgerEntryComponent implements OnInit {
   onDelete(item: IBasketItem) {
     console.log(item);
     if (confirm('Are you sure?')) {
-      // this.ledgerEntryService.deleteLedgerEntryItem(item);
+      this.basketService.removeItemFromBasket(item);
+      this.refreshBasket();
     }
   }
 
