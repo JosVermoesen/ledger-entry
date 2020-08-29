@@ -1,49 +1,57 @@
 <div class="card card-body mb-3">
   <div>
     <tabset>
-      <tab heading="Ledger Entries">
-        <form [formGroup]="ledgerEntryForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <input formControlName="id" hidden>
-            <div class="btn-group" btnRadioGroup formControlName="dcOption">
-              <label btnRadio="D" class="btn btn-primary btn-sm" tabindex="0" role="button">Debit</label>
-              <label btnRadio="C" class="btn btn-primary btn-sm" tabindex="0" role="button">Credit</label>
-              <label btnRadio="T" class="btn btn-primary btn-sm mr-1" tabindex="0" role="button">Debit/Credit</label>
-              <div *ngIf="!readyForBooking">
-                <button (click)="checkBalance()" type="button" class="btn btn-warning btn-sm">Square Check:
-                  {{ totalSolde  | currency:'EUR'}}</button>
+      <tab heading="Entry Lines" [disabled]="!ledgerEntryHeaderForm.valid">
+        <div *ngIf="ledgerEntryHeaderForm.valid">
+          <form [formGroup]="ledgerEntryForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <input formControlName="id" hidden>
+              <div class="btn-group" btnRadioGroup formControlName="dcOption">
+                <label btnRadio="D" class="btn btn-primary btn-sm" tabindex="0" role="button">Debit</label>
+                <label btnRadio="C" class="btn btn-primary btn-sm" tabindex="0" role="button">Credit</label>
+                <label btnRadio="T" class="btn btn-primary btn-sm mr-1" tabindex="0" role="button">Debit/Credit</label>
+                <div *ngIf="!readyForBooking">
+                  <button (click)="checkBalance()" type="button" class="btn btn-warning btn-sm">Square Check:
+                    {{ totalSolde  | currency:'EUR'}}</button>
+                </div>
+                <div *ngIf="readyForBooking">
+                  <button (click)="onBooking()" type="button" class="btn btn-success btn-sm">Book Entry</button>
+                </div>
               </div>
-              <div *ngIf="readyForBooking">
-                <button (click)="onBooking()" type="button" class="btn btn-success btn-sm">Book Entry</button>
-              </div>
-            </div>
-            <input formControlName="amount" type="number" class="form-control" placeholder="Add an amount">
+              <input formControlName="amount" type="number" class="form-control" placeholder="Add an amount">
 
-            <div *ngIf="ledgerEntryForm.value.dcOption === 'D'">
-              <input formControlName="account" type="text" class="form-control"
-                placeholder="Add account number for debit">
+              <div *ngIf="ledgerEntryForm.value.dcOption === 'D'">
+                <input formControlName="account" type="text" class="form-control"
+                  placeholder="Add account number for debit">
+              </div>
+              <div *ngIf="ledgerEntryForm.value.dcOption === 'C'">
+                <input formControlName="account" type="text" class="form-control"
+                  placeholder="Add account number for credit">
+              </div>
+              <div *ngIf="ledgerEntryForm.value.dcOption == 'T'">
+                <input formControlName="account" type="text" class="form-control"
+                  placeholder="Add account number for debit">
+                <input formControlName="tAccount" type="text" class="form-control"
+                  placeholder="Add account number for credit">
+              </div>
             </div>
-            <div *ngIf="ledgerEntryForm.value.dcOption === 'C'">
-              <input formControlName="account" type="text" class="form-control"
-                placeholder="Add account number for credit">
-            </div>
-            <div *ngIf="ledgerEntryForm.value.dcOption == 'T'">
-              <input formControlName="account" type="text" class="form-control"
-                placeholder="Add account number for debit">
-              <input formControlName="tAccount" type="text" class="form-control"
-                placeholder="Add account number for credit">
-            </div>
+
+            <input type="submit" class="btn btn-primary mr-1" value="Add" [disabled]="!ledgerEntryForm.valid">
+            <button type="button" class="btn btn-warning mr-1" (click)="clearState()">Ignore</button>
+            <!-- <button type="button" class="btn btn-danger" (click)="clearEntry()">Remove All</button> -->
+          </form>
+          <a>{{ warning }} </a>
+        </div>
+
+        <div *ngIf="!ledgerEntryHeaderForm.valid">
+          <br>
+          <p>Set date and description first</p>
+        </div>
+
+        <div *ngIf="ledgerEntryForm.valid">
+          <div *ngIf="(basket$ | async) === null">
+            <p>Add ledgerentries</p>
           </div>
-
-          <input type="submit" class="btn btn-primary mr-1" value="Add" [disabled]="!ledgerEntryForm.valid">
-          <button type="button" class="btn btn-warning mr-1" (click)="clearState()">Ignore</button>
-          <button type="button" class="btn btn-danger" (click)="clearEntry()">Remove All</button>
-
-        </form>
-        <a>{{ warning }} </a>
-
-        <div *ngIf="(basket$ | async) === null">
-          <p>Add ledgerentries</p>
         </div>
 
         <div *ngIf="(basket$ | async) as basket">
@@ -64,8 +72,8 @@
           <p>Loading session...</p>
         </div>
       </tab>
-      <tab heading="Header">
-        <form [formGroup]="ledgerEntryHeaderForm" (ngSubmit)="onHeaderLock()">
+      <tab heading="Date">
+        <form [formGroup]="ledgerEntryHeaderForm">
           <div class="form-group">
             <input formControlName="description" type="text" class="form-control" placeholder="Add a description">
 
@@ -73,7 +81,6 @@
               formControlName="date" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', containerClass: 'theme-dark-blue' }"
               placeholder=" Add a date">
           </div>
-          <input type="submit" value="Lock" [disabled]="!ledgerEntryHeaderForm.valid" class="btn btn-primary">
         </form>
       </tab>
       <tab heading="Journal Entry (Json)">

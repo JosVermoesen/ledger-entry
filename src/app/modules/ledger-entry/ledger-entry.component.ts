@@ -73,17 +73,6 @@ export class LedgerEntryComponent implements OnInit {
     this.loaded = true;
   }
 
-  onHeaderLock() {
-    this.descriptionAsHeader = this.ledgerEntryHeaderForm.value.description;
-    this.dateAsHeader = this.ledgerEntryHeaderForm.value.date;
-    this.tabHeading = this.descriptionAsHeader;
-    if (this.tabHeading.length > 15) {
-      this.tabHeading = this.tabHeading.substring(0, 15) + '...';
-    }
-    this.entryHeaderLocked = true;
-    this.clearState();
-  }
-
   onSubmit() {
     if (this.ledgerEntryForm.valid) {
       const basketItem: IBasketItem = Object.assign(
@@ -115,14 +104,6 @@ export class LedgerEntryComponent implements OnInit {
       ],
       tAccount: [null]
     });
-  }
-
-  clearEntry() {
-    if (confirm('Are you sure?')) {
-      // localStorage.removeItem('ledgerEntries');
-      this.entryItemsJson = null;
-      this.entryHeaderLocked = false;
-    }
   }
 
   checkBalance() {
@@ -205,4 +186,6 @@ export class LedgerEntryComponent implements OnInit {
         return 'green'; // with t bookingnumber
     }
   }
+
+  clearEntry() { }
 }
