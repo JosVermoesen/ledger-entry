@@ -41,7 +41,7 @@ export class BasketService {
     return this.entrySource.value;
   }
 
-  addItemToBasket(item: ILedgerEntryItem, description: string, entryDate: Date, cubeControl: number) {
+  addItemToBasket(item: IBasketItem, description: string, entryDate: Date, cubeControl: number) {
     const itemToAdd: IBasketItem = this.mapEntryItemToBasketItem(item);
     const basket = this.getCurrentBasketValue() ?? this.createBasket();
     basket.items = this.addOrUpdateItem(basket.items, itemToAdd);
@@ -70,13 +70,13 @@ export class BasketService {
     return basket;
   }
 
-  private mapEntryItemToBasketItem(item: ILedgerEntryItem): IBasketItem {
+  private mapEntryItemToBasketItem(item: IBasketItem): IBasketItem {
     return {
       id: item.id,
       dcOption: item.dcOption,
       amount: item.amount,
-      account: item.bNumber,
-      tAccount: item.tNumber
+      account: item.account,
+      tAccount: item.tAccount
     }
   }
 }
