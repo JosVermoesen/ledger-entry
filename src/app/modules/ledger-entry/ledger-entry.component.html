@@ -5,9 +5,6 @@
         <form [formGroup]="ledgerEntryForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <input formControlName="id" hidden>
-            <input formControlName="description" hidden>
-            <input formControlName="date" hidden>
-
             <div class="btn-group" btnRadioGroup formControlName="dcOption">
               <label btnRadio="D" class="btn btn-primary btn-sm" tabindex="0" role="button">Debit</label>
               <label btnRadio="C" class="btn btn-primary btn-sm" tabindex="0" role="button">Credit</label>

@@ -107,8 +107,6 @@ export class LedgerEntryComponent implements OnInit {
 
     this.ledgerEntryForm = this.fb.group({
       id: Guid(),
-      description: [this.descriptionAsHeader, Validators.required],
-      date: [this.dateAsHeader, Validators.required],
       dcOption: [null, Validators.required],
       amount: [null, [Validators.required, Validators.min(0.01)]],
       account: [
@@ -117,7 +115,6 @@ export class LedgerEntryComponent implements OnInit {
       ],
       tAccount: [null]
     });
-    this.ledgerEntryService.clearState();
   }
 
   clearEntry() {
@@ -168,8 +165,24 @@ export class LedgerEntryComponent implements OnInit {
 
   onSelect(item: IBasketItem) {
     console.log(item);
-    /* this.ledgerEntryService.setFormLedgerEntry(item);
-    this.selectedLedgerItem = item; */
+    this.setForUpdate(item);
+  }
+
+  setForUpdate(item: IBasketItem) {
+    this.isNew = false;
+    this.readyForBooking = false;
+    this.totalSolde = null;
+
+    this.ledgerEntryForm = this.fb.group({
+      id: item.id,
+      dcOption: [item.dcOption, Validators.required],
+      amount: [item.amount, [Validators.required, Validators.min(0.01)]],
+      account: [
+        item.account,
+        [Validators.required, Validators.minLength(3), Validators.maxLength(7)]
+      ],
+      tAccount: [item.tAccount]
+    });
   }
 
   onDelete(item: IBasketItem) {
