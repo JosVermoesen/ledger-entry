@@ -36,11 +36,10 @@
               </div>
             </div>
 
-            <input type="submit" class="btn btn-primary mr-1" value="Add" [disabled]="!ledgerEntryForm.valid">
+            <input type="submit" class="btn btn-primary mr-1" value="{{btnAddOrEdit}}" [disabled]="!ledgerEntryForm.valid">
             <button type="button" class="btn btn-warning mr-1" (click)="clearState()">Ignore</button>
             <!-- <button type="button" class="btn btn-danger" (click)="clearEntry()">Remove All</button> -->
           </form>
-          <a>{{ warning }} </a>
         </div>
 
         <div *ngIf="!ledgerEntryHeaderForm.valid">

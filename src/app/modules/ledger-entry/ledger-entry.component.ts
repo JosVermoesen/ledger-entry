@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { ILedgerEntryItem } from './models/ledgerEntryItem';
-import { LedgerEntryService } from './services/ledgerentry.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BasketService } from './services/basket.service';
 import { Guid } from '../../shared/functions/uuid';
@@ -16,22 +14,17 @@ import { IBasket, IBasketItem } from './models/basket';
 })
 export class LedgerEntryComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
-  warning: string;
-  entryItemsJson: ILedgerEntryItem[];
 
   ledgerEntryForm: FormGroup;
-
   ledgerEntryHeaderForm: FormGroup;
+
   entryHeaderLocked: boolean;
   descriptionAsHeader: string;
   dateAsHeader: Date;
 
-  tabHeading: string;
   btnAddOrEdit: string;
-  isNew = true;
   readyForBooking = false;
   totalSolde: number;
-  countEntries: number;
 
   loaded = false;
   basket$: Observable<IBasket>;
@@ -40,7 +33,6 @@ export class LedgerEntryComponent implements OnInit {
 
   constructor(
     private basketService: BasketService,
-    private ledgerEntryService: LedgerEntryService,
     private fb: FormBuilder
   ) { }
 
@@ -90,9 +82,7 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   clearState() {
-    this.isNew = true;
     this.readyForBooking = false;
-    this.totalSolde = null;
 
     this.ledgerEntryForm = this.fb.group({
       id: Guid(),
@@ -150,9 +140,7 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   setForUpdate(item: IBasketItem) {
-    this.isNew = false;
     this.readyForBooking = false;
-    this.totalSolde = null;
 
     this.ledgerEntryForm = this.fb.group({
       id: item.id,
@@ -164,6 +152,7 @@ export class LedgerEntryComponent implements OnInit {
       ],
       tAccount: [item.tAccount]
     });
+    this.btnAddOrEdit = 'Edit';
   }
 
   onDelete(item: IBasketItem) {

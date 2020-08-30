@@ -7,7 +7,6 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
-import { LedgerEntryService } from './services/ledgerentry.service';
 import { LedgerEntryRoutingModule } from './ledger-entry-routing.module';
 import { LedgerEntryComponent } from './ledger-entry.component';
 
@@ -23,8 +22,6 @@ import { LedgerEntryComponent } from './ledger-entry.component';
     BsDatepickerModule.forRoot(),
     LedgerEntryRoutingModule
   ],
-  providers: [
-    LedgerEntryService
-  ]
+  providers: []
 })
 export class LedgerEntryModule { }
