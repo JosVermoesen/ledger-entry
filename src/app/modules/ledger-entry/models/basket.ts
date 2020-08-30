@@ -4,7 +4,7 @@ export interface IBasket {
   id: string;
   items: IBasketItem[];
   description: string;
-  entryDate: Date;
+  entryDate: string;
   cubeControl: number;
 }
 
@@ -20,6 +20,6 @@ export class Basket implements IBasket {
   id = Guid();
   items: IBasketItem[] = [];
   description: string;
-  entryDate: Date;
+  entryDate: string;
   cubeControl: number;
 }

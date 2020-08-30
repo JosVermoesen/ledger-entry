@@ -36,7 +36,8 @@
               </div>
             </div>
 
-            <input type="submit" class="btn btn-primary mr-1" value="{{btnAddOrEdit}}" [disabled]="!ledgerEntryForm.valid">
+            <input type="submit" class="btn btn-primary mr-1" value="{{btnAddOrEdit}}"
+              [disabled]="!ledgerEntryForm.valid">
             <button type="button" class="btn btn-warning mr-1" (click)="clearState()">Ignore</button>
             <!-- <button type="button" class="btn btn-danger" (click)="clearEntry()">Remove All</button> -->
           </form>
@@ -44,7 +45,7 @@
 
         <div *ngIf="!ledgerEntryHeaderForm.valid">
           <br>
-          <p>Set date and description first</p>
+          <p>Set description info & booking period first</p>
         </div>
 
         <div *ngIf="ledgerEntryForm.valid">
@@ -68,21 +69,20 @@
         </div>
 
         <div *ngIf="!loaded">
-          <p>Loading session...</p>
+          <p>Busy...</p>
         </div>
       </tab>
-      <tab heading="Date">
+      <tab heading="Info & Periode">
         <form [formGroup]="ledgerEntryHeaderForm">
           <div class="form-group">
             <input formControlName="description" type="text" class="form-control" placeholder="Add a description">
-
             <input class="form-control" class="form-control" #datepickerYMD="bsDatepicker" bsDatepicker
-              formControlName="date" [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY', containerClass: 'theme-dark-blue' }"
-              placeholder=" Add a date">
+              formControlName="lDate" placeholder="Add a date"
+              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-default' }">
           </div>
         </form>
       </tab>
-      <tab heading="Journal Entry (Json)">
+      <tab heading="View Redis Data (Json)">
         <pre class="card card-block card-header">{{ basketJson | json }}</pre>
       </tab>
     </tabset>

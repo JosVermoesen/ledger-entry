@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import * as moment from 'moment';
+
 import { BasketService } from './services/basket.service';
 import { Guid } from '../../shared/functions/uuid';
 import { Observable } from 'rxjs';
@@ -13,14 +14,12 @@ import { IBasket, IBasketItem } from './models/basket';
   styleUrls: ['./ledger-entry.component.scss']
 })
 export class LedgerEntryComponent implements OnInit {
-  bsConfig: Partial<BsDatepickerConfig>;
-
-  ledgerEntryForm: FormGroup;
   ledgerEntryHeaderForm: FormGroup;
-
   entryHeaderLocked: boolean;
   descriptionAsHeader: string;
-  dateAsHeader: Date;
+  dateAsHeader: string;
+
+  ledgerEntryForm: FormGroup;
 
   btnAddOrEdit: string;
   readyForBooking = false;
@@ -42,17 +41,17 @@ export class LedgerEntryComponent implements OnInit {
     const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
     if (ledgerEntryId) {
       this.descriptionAsHeader = this.basketJson.description;
-      this.dateAsHeader = this.basketJson.entryDate;
+      this.dateAsHeader = moment(this.basketJson.entryDate).format('DD/MM/YYYY');
       this.entryHeaderLocked = true;
     } else {
       this.descriptionAsHeader = null;
-      this.dateAsHeader = null;
+      this.dateAsHeader = moment().format('DD/MM/YYYY');
       this.entryHeaderLocked = false;
     }
 
     this.ledgerEntryHeaderForm = this.fb.group({
       description: [this.descriptionAsHeader, Validators.required],
-      date: [this.dateAsHeader, Validators.required]
+      lDate: [this.dateAsHeader, Validators.required]
     });
 
     this.btnAddOrEdit = 'Add';
@@ -71,10 +70,9 @@ export class LedgerEntryComponent implements OnInit {
         {},
         this.ledgerEntryForm.value
       );
-
-      console.log(basketItem);
+      this.loaded = false;
       const entryDescription = this.ledgerEntryHeaderForm.value.description;
-      const entryDate = this.ledgerEntryHeaderForm.value.date;
+      const entryDate = this.ledgerEntryHeaderForm.value.lDate;
       this.basketService.addItemToBasket(basketItem, entryDescription, entryDate, -1);
       this.refreshBasket();
     }
@@ -135,7 +133,7 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   onSelect(item: IBasketItem) {
-    console.log(item);
+    // console.log(item);
     this.setForUpdate(item);
   }
 
@@ -152,12 +150,13 @@ export class LedgerEntryComponent implements OnInit {
       ],
       tAccount: [item.tAccount]
     });
-    this.btnAddOrEdit = 'Edit';
+    this.btnAddOrEdit = 'Save';
   }
 
   onDelete(item: IBasketItem) {
-    console.log(item);
+    // console.log(item);
     if (confirm('Are you sure?')) {
+      this.loaded = false;
       this.basketService.removeItemFromBasket(item);
       this.refreshBasket();
     }

@@ -40,7 +40,7 @@ export class BasketService {
     return this.basketSource.value;
   }
 
-  addItemToBasket(item: IBasketItem, description: string, entryDate: Date, cubeControl: number) {
+  addItemToBasket(item: IBasketItem, description: string, entryDate: string, cubeControl: number) {
     const itemToAdd: IBasketItem = this.mapEntryItemToBasketItem(item);
     const basket = this.getCurrentBasketValue() ?? this.createBasket();
     basket.items = this.addOrUpdateItem(basket.items, itemToAdd);
