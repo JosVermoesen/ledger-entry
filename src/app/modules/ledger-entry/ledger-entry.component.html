@@ -11,7 +11,7 @@
                 <label btnRadio="C" class="btn btn-primary btn-sm" tabindex="0" role="button">Credit</label>
                 <label btnRadio="T" class="btn btn-primary btn-sm mr-1" tabindex="0" role="button">Debit/Credit</label>
                 <div *ngIf="!readyForBooking">
-                  <button (click)="checkBalance()" type="button" class="btn btn-warning btn-sm">Square Check:
+                  <button (click)="checkBalance()" type="button" class="btn btn-warning btn-sm">Recalc:
                     {{ totalSolde  | currency:'EUR'}}</button>
                 </div>
                 <div *ngIf="readyForBooking">
@@ -78,11 +78,11 @@
             <input formControlName="description" type="text" class="form-control" placeholder="Add a description">
             <input class="form-control" class="form-control" #datepickerYMD="bsDatepicker" bsDatepicker
               formControlName="lDate" placeholder="Add a date"
-              [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-default' }">
+              [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD', containerClass: 'theme-default' }">
           </div>
         </form>
       </tab>
-      <tab heading="View Redis Data (Json)">
+      <tab heading="Redis Data (Json)">
         <pre class="card card-block card-header">{{ basketJson | json }}</pre>
       </tab>
     </tabset>

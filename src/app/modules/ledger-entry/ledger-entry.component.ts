@@ -27,7 +27,7 @@ export class LedgerEntryComponent implements OnInit {
 
   loaded = false;
   basket$: Observable<IBasket>;
-  basketJson: IBasket;
+  basketJson: IBasket = null;
   selectedBasketItem: IBasketItem;
 
   constructor(
@@ -41,11 +41,15 @@ export class LedgerEntryComponent implements OnInit {
     const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
     if (ledgerEntryId) {
       this.descriptionAsHeader = this.basketJson.description;
-      this.dateAsHeader = moment(this.basketJson.entryDate).format('DD/MM/YYYY');
+      const ioDate = this.basketJson.entryDate;
+      const momentDate = moment(ioDate).format('YYYY-MM-DD');
+      this.dateAsHeader = momentDate;
       this.entryHeaderLocked = true;
+      this.checkBalance();
     } else {
       this.descriptionAsHeader = null;
-      this.dateAsHeader = moment().format('DD/MM/YYYY');
+      const momentDate = moment().format('YYYY-MM-DD');
+      this.dateAsHeader = momentDate;
       this.entryHeaderLocked = false;
     }
 
@@ -73,8 +77,12 @@ export class LedgerEntryComponent implements OnInit {
       this.loaded = false;
       const entryDescription = this.ledgerEntryHeaderForm.value.description;
       const entryDate = this.ledgerEntryHeaderForm.value.lDate;
+      // const momentDate = moment(entryDate).format('YYYY-MM-DD');
+
+      // const cubeCtrl = 0; // this.checkBalance();
+
       this.basketService.addItemToBasket(basketItem, entryDescription, entryDate, -1);
-      this.refreshBasket();
+      this.checkBalance();
     }
     this.clearState();
   }
@@ -95,35 +103,37 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   checkBalance() {
-    /* this.entryItemsJson = JSON.parse(localStorage.getItem('ledgerEntries'));
-    if (this.entryItemsJson.length !== 0) {
-      this.countEntries = 0;
-      this.totalSolde = 0;
-      while (this.countEntries < this.entryItemsJson.length) {
-        const thisEntry: ILedgerEntryItem = this.entryItemsJson[this.countEntries];
-        const value = thisEntry.amount;
-        switch (thisEntry.dcOption.substring(0, 1)) {
+    this.refreshBasket();
+    if (this.basketJson !== null) {
+      const bItems = this.basketJson.items.length;
+
+      let cubeAmount = 0;
+      let counter = 0;
+      while (counter < bItems) {
+        const value = this.basketJson.items[counter].amount;
+        const dcOption = this.basketJson.items[counter].dcOption;
+        switch (dcOption) {
           case 'D':
-            this.totalSolde = this.totalSolde + value;
+            cubeAmount = cubeAmount + value;
             break; // debit
 
           case 'C':
-            this.totalSolde = this.totalSolde - value;
+            cubeAmount = cubeAmount - value;
             break; // credit
 
           case 'T':
-            break; // with t bookingnumber
+            break; // with t bookingnumber nothing to do
         }
-
-        this.countEntries++;
+        counter++;
       }
-
-      if (this.totalSolde === 0) {
+      this.totalSolde = cubeAmount;
+      console.log(this.totalSolde);
+      if (this.totalSolde == 0 && counter) {
         this.readyForBooking = true;
       } else {
         this.readyForBooking = false;
       }
-    } */
+    }
   }
 
   onBooking() {
@@ -159,6 +169,7 @@ export class LedgerEntryComponent implements OnInit {
       this.loaded = false;
       this.basketService.removeItemFromBasket(item);
       this.refreshBasket();
+      this.checkBalance();
     }
   }
 
