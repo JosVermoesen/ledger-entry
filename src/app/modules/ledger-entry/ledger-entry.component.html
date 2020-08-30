@@ -85,7 +85,9 @@
         </form>
       </tab>
       <tab heading="Redis Data (Json)">
-        <pre class="card card-block card-header">{{ basketJson | json }}</pre>
+        <div *ngIf="(basket$ | async)">
+          <pre class="card card-block card-header">{{(basket$ | async ) | json}}</pre>
+        </div>
       </tab>
     </tabset>
   </div>
