@@ -23,3 +23,7 @@ export class Basket implements IBasket {
   entryDate: string;
   cubeControl: number;
 }
+
+export interface IBasketSolde {
+  ctrlSolde: number;
+}

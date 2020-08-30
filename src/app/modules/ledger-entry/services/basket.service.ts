@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { IBasket, IBasketItem, Basket } from '../models/basket';
+import { IBasket, IBasketItem, Basket, IBasketSolde } from '../models/basket';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,10 @@ export class BasketService {
   private basketSource = new BehaviorSubject<IBasket>(null);
   basket$ = this.basketSource.asObservable();
 
+  private basketSoldeSource = new BehaviorSubject<IBasketSolde>(null);
+  basketSolde$ = this.basketSoldeSource.asObservable();
+
+
   constructor(private http: HttpClient) { }
 
   getLedgerEntry(id: string) {
@@ -21,7 +25,8 @@ export class BasketService {
       .pipe(
         map((basket: IBasket) => {
           this.basketSource.next(basket);
-          console.log(this.getCurrentBasketValue());
+          // console.log(this.getCurrentBasketValue());
+          this.calculateCubeAmount();
         })
       );
   }
@@ -30,7 +35,8 @@ export class BasketService {
     return this.http.post(this.baseUrl + 'ledgerentry', basket)
       .subscribe((response: IBasket) => {
         this.basketSource.next(response);
-        console.log(response);
+        // console.log(response);
+        this.calculateCubeAmount();
       }, error => {
         console.log(error);
       });
@@ -42,12 +48,45 @@ export class BasketService {
 
   addItemToBasket(item: IBasketItem, description: string, entryDate: string, cubeControl: number) {
     const itemToAdd: IBasketItem = this.mapEntryItemToBasketItem(item);
+
+    /* let basket = this.getCurrentBasketValue();
+    if (basket === null) {
+      this.createBasket();
+    } */
+    // above on older typescript does the same as line below!
     const basket = this.getCurrentBasketValue() ?? this.createBasket();
+
     basket.items = this.addOrUpdateItem(basket.items, itemToAdd);
     basket.description = description;
     basket.entryDate = entryDate;
     basket.cubeControl = cubeControl;
     this.setBasket(basket);
+  }
+
+  private calculateCubeAmount() {
+    const basket = this.getCurrentBasketValue();
+
+    let cubeAmount = 0;
+    let counter = 0;
+    while (counter < basket.items.length) {
+      const value = basket.items[counter].amount;
+      const dcOption = basket.items[counter].dcOption;
+      switch (dcOption) {
+        case 'D':
+          cubeAmount = cubeAmount + value;
+          break; // debit
+
+        case 'C':
+          cubeAmount = cubeAmount - value;
+          break; // credit
+
+        case 'T':
+          break; // with t bookingnumber nothing to do
+      }
+      counter++;
+    }
+    const ctrlSolde = cubeAmount;
+    this.basketSoldeSource.next({ctrlSolde})
   }
 
   private addOrUpdateItem(items: IBasketItem[], itemToAdd: IBasketItem): IBasketItem[] {
@@ -86,6 +125,7 @@ export class BasketService {
       if (basket.items.length > 0) {
         this.setBasket(basket);
       } else {
+        this.calculateCubeAmount();
         this.deleteBasket(basket);
       }
     }

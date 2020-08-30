@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { BasketService } from './services/basket.service';
 import { Guid } from '../../shared/functions/uuid';
 import { Observable } from 'rxjs';
-import { IBasket, IBasketItem } from './models/basket';
+import { IBasket, IBasketItem, IBasketSolde } from './models/basket';
 
 @Component({
   selector: 'app-ledger-entry',
@@ -29,6 +29,7 @@ export class LedgerEntryComponent implements OnInit {
   basket$: Observable<IBasket>;
   basketJson: IBasket = null;
   selectedBasketItem: IBasketItem;
+  basketSolde$: Observable<IBasketSolde>;
 
   constructor(
     private basketService: BasketService,
@@ -36,6 +37,8 @@ export class LedgerEntryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.basket$ = this.basketService.basket$;
+    this.basketSolde$ = this.basketService.basketSolde$;
     this.refreshBasket();
 
     const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
@@ -45,7 +48,6 @@ export class LedgerEntryComponent implements OnInit {
       const momentDate = moment(ioDate).format('YYYY-MM-DD');
       this.dateAsHeader = momentDate;
       this.entryHeaderLocked = true;
-      this.checkBalance();
     } else {
       this.descriptionAsHeader = null;
       const momentDate = moment().format('YYYY-MM-DD');
@@ -63,7 +65,6 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   refreshBasket() {
-    this.basket$ = this.basketService.basket$;
     this.basketJson = this.basketService.getCurrentBasketValue();
     this.loaded = true;
   }
@@ -77,13 +78,10 @@ export class LedgerEntryComponent implements OnInit {
       this.loaded = false;
       const entryDescription = this.ledgerEntryHeaderForm.value.description;
       const entryDate = this.ledgerEntryHeaderForm.value.lDate;
-      // const momentDate = moment(entryDate).format('YYYY-MM-DD');
-
-      // const cubeCtrl = 0; // this.checkBalance();
 
       this.basketService.addItemToBasket(basketItem, entryDescription, entryDate, -1);
-      this.checkBalance();
     }
+    this.refreshBasket();
     this.clearState();
   }
 
@@ -103,37 +101,7 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   checkBalance() {
-    this.refreshBasket();
-    if (this.basketJson !== null) {
-      const bItems = this.basketJson.items.length;
 
-      let cubeAmount = 0;
-      let counter = 0;
-      while (counter < bItems) {
-        const value = this.basketJson.items[counter].amount;
-        const dcOption = this.basketJson.items[counter].dcOption;
-        switch (dcOption) {
-          case 'D':
-            cubeAmount = cubeAmount + value;
-            break; // debit
-
-          case 'C':
-            cubeAmount = cubeAmount - value;
-            break; // credit
-
-          case 'T':
-            break; // with t bookingnumber nothing to do
-        }
-        counter++;
-      }
-      this.totalSolde = cubeAmount;
-      console.log(this.totalSolde);
-      if (this.totalSolde == 0 && counter) {
-        this.readyForBooking = true;
-      } else {
-        this.readyForBooking = false;
-      }
-    }
   }
 
   onBooking() {
@@ -169,7 +137,6 @@ export class LedgerEntryComponent implements OnInit {
       this.loaded = false;
       this.basketService.removeItemFromBasket(item);
       this.refreshBasket();
-      this.checkBalance();
     }
   }
 

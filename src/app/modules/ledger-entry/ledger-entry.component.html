@@ -11,8 +11,10 @@
                 <label btnRadio="C" class="btn btn-primary btn-sm" tabindex="0" role="button">Credit</label>
                 <label btnRadio="T" class="btn btn-primary btn-sm mr-1" tabindex="0" role="button">Debit/Credit</label>
                 <div *ngIf="!readyForBooking">
-                  <button (click)="checkBalance()" type="button" class="btn btn-warning btn-sm">Recalc:
-                    {{ totalSolde  | currency:'EUR'}}</button>
+                  <div *ngIf="(basketSolde$ | async)">
+                    <button (click)="checkBalance()" type="button" class="btn btn-warning btn-sm">Solde:
+                      {{(basketSolde$ | async ).ctrlSolde | currency:'EUR'}}</button>
+                  </div>
                 </div>
                 <div *ngIf="readyForBooking">
                   <button (click)="onBooking()" type="button" class="btn btn-success btn-sm">Book Entry</button>
