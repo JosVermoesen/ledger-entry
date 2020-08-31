@@ -3,11 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    // path: 'ledger-entry',
-    path: '**',
+    path: 'home',
+    loadChildren: () =>
+      import('./modules/home/home.module').then((m) => m.HomeModule),
+  },
+  {
+    path: 'ledger-entry',
     loadChildren: () => import('./modules/ledger-entry/ledger-entry.module').then(m => m.LedgerEntryModule)
   },
-  // { path: '**', redirectTo: 'ledger-entry', pathMatch: 'full' }
+  { path: '**', redirectTo: 'contact', pathMatch: 'full' },
 ];
 
 @NgModule({

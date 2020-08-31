@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 import { BasketService } from './services/basket.service';
-import { Guid } from '../../shared/functions/uuid';
+import { FGuid } from '../../shared/functions/guid';
 import { Observable } from 'rxjs';
 import { IBasket, IBasketItem, IBasketSolde } from './models/basket';
 
@@ -89,7 +89,7 @@ export class LedgerEntryComponent implements OnInit {
     this.readyForBooking = false;
 
     this.ledgerEntryForm = this.fb.group({
-      id: Guid(),
+      id: FGuid(),
       dcOption: [null, Validators.required],
       amount: [null, [Validators.required, Validators.min(0.01)]],
       account: [
@@ -116,7 +116,7 @@ export class LedgerEntryComponent implements OnInit {
   }
 
   setForUpdate(item: IBasketItem) {
-    this.readyForBooking = false;
+    // this.readyForBooking = false;
 
     this.ledgerEntryForm = this.fb.group({
       id: item.id,

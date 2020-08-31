@@ -11,14 +11,16 @@ export class AppComponent implements OnInit {
   constructor(private basketService: BasketService) {}
 
   ngOnInit(): void {
-    // check open sessions for redis used with the browser used
+    // check open redis session for ledgerEntry
     const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
+    localStorage.setItem('redisNotRunning', ledgerEntryId);
     if (ledgerEntryId) {
       this.basketService.getLedgerEntry(ledgerEntryId)
         .subscribe(() => {
           console.log('initialised ledgerEntry');
+          localStorage.removeItem('redisNotRunning');
         }, error => {
-          console.log(error);
+          console.log('there is an error: ',error);
         });
     }
   }

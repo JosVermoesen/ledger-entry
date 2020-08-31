@@ -1,5 +1,18 @@
-<nav class="navbar navbar-dark bg-dark mb-3">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <!-- <nav class="navbar navbar-expand-sm bg-dark"> -->
   <div class="container">
-    <a class="navbar-brand">LedgerEntry for Redis API</a>
+    <a class="navbar-brand" routerLink="/home">
+      Redis
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a routerLink="/ledger-entry" data-toggle="collapse" data-target=".navbar-collapse.show"
+            class="nav-link">Ledger Entry</a>
+        </li>
+      </ul>
+    </div>
+    
   </div>
 </nav>

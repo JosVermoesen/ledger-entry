@@ -60,7 +60,7 @@
           <ul class="list-group">
             <li *ngFor="let item of basket.items" [class.list-group-item-secondary]="selectedBasketItem === item"
               class="list-group-item d-flex justify-content-between align-items-center">
-              <a (click)="onSelect(item)" href="#">{{ item.dcOption }}: {{ item.account }}</a>
+              <a class="nav-item" (click)="onSelect(item)">{{ item.dcOption }}: {{ item.account }}</a>
               <a>{{ item.tAccount }}</a>
               <div [ngStyle]="{'color':getColor(item.dcOption)}">
                 <span>{{ item.amount | currency:'EUR' }}</span>
