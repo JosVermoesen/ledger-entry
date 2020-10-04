@@ -8,7 +8,7 @@ import { BasketService } from './modules/ledger-entry/services/basket.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private basketService: BasketService) {}
+  constructor(private basketService: BasketService) { }
 
   ngOnInit(): void {
     // check open redis session for ledgerEntry
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
         .subscribe(() => {
           console.log('initialised ledgerEntry');
         }, error => {
-          console.log('there is an error: ',error);
+          console.log('there is an error: ', error);
         });
     }
   }
