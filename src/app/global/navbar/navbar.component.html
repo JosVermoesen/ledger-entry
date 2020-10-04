@@ -2,17 +2,28 @@
   <!-- <nav class="navbar navbar-expand-sm bg-dark"> -->
   <div class="container">
     <a class="navbar-brand" routerLink="/home">
-      Redis
+      Home
     </a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+      <fa-icon class="fa-1x mb-2" [icon]="faBars"></fa-icon>
+      <span class=""></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav ml-auto">
+
         <li class="nav-item">
           <a routerLink="/ledger-entry" data-toggle="collapse" data-target=".navbar-collapse.show"
-            class="nav-link">Ledger Entry</a>
+            class="nav-link">Ledger
+            Entry</a>
         </li>
+
+        <!-- <li class="nav-item">
+          <a class="nav-link" (click)="onLanguageModal()">Taalkeuze
+            <fa-icon class="fa-1x" [icon]="faGlobe"></fa-icon>
+          </a>
+        </li> -->
       </ul>
     </div>
-    
   </div>
 </nav>
