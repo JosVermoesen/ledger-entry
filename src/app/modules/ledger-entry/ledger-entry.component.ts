@@ -37,11 +37,11 @@ export class LedgerEntryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
     this.basket$ = this.basketService.basket$;
     this.basketSolde$ = this.basketService.basketSolde$;
     this.refreshBasket();
 
-    const ledgerEntryId = localStorage.getItem('ledgerEntry_id');
     if (ledgerEntryId) {
       this.descriptionAsHeader = this.basketJson.description;
       const ioDate = this.basketJson.entryDate;

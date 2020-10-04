@@ -17,36 +17,73 @@ export class BasketService {
   private basketSoldeSource = new BehaviorSubject<IBasketSolde>(null);
   basketSolde$ = this.basketSoldeSource.asObservable();
 
-
   constructor(private http: HttpClient) { }
 
+  private createBasket(): IBasket {
+    const basket = new Basket();
+    localStorage.setItem('ledgerEntry_id', basket.id);
+    localStorage.setItem(basket.id, JSON.stringify(basket))
+    return basket;
+  }
+
   getLedgerEntry(id: string) {
-    return this.http.get(this.baseUrl + 'ledgerentry?id=' + id)
+    // LOCALSTORE !!
+    return this.http
+      .get('assets/dummy.txt', {
+        responseType: 'text',
+      })
+      .pipe(
+        map(() => {
+          const basket: IBasket = JSON.parse(localStorage.getItem(id));
+          this.basketSource.next(basket);
+          // console.log(this.getCurrentBasketValue());
+          this.calculateCubeAmount();
+        })
+      );
+
+    // REDIS !!
+    /* return this.http.get(this.baseUrl + 'ledgerentry?id=' + id)
       .pipe(
         map((basket: IBasket) => {
           this.basketSource.next(basket);
           // console.log(this.getCurrentBasketValue());
           this.calculateCubeAmount();
         })
-      );
+      ); */
   }
 
   setBasket(basket: IBasket) {
-    return this.http.post(this.baseUrl + 'ledgerentry', basket)
+    // LOCALSTORE !!
+    return this.http
+      .get('assets/dummy.txt', {
+        responseType: 'text',
+      })
+      .subscribe(() => {
+        localStorage.setItem(basket.id, JSON.stringify(basket));
+        this.basketSource.next(basket);
+        this.calculateCubeAmount();
+      });
+
+    // REDIS !!
+    /* return this.http.post(this.baseUrl + 'ledgerentry', basket)
       .subscribe((response: IBasket) => {
         this.basketSource.next(response);
-        // console.log(response);
+        console.log(response);
         this.calculateCubeAmount();
       }, error => {
         console.log(error);
-      });
+      }); */
   }
 
   getCurrentBasketValue() {
     return this.basketSource.value;
   }
 
-  addItemToBasket(item: IBasketItem, description: string, entryDate: string, cubeControl: number) {
+  addItemToBasket(
+    item: IBasketItem,
+    description: string,
+    entryDate: string,
+    cubeControl: number) {
     const itemToAdd: IBasketItem = this.mapEntryItemToBasketItem(item);
 
     /* let basket = this.getCurrentBasketValue();
@@ -86,7 +123,7 @@ export class BasketService {
       counter++;
     }
     const ctrlSolde = cubeAmount;
-    this.basketSoldeSource.next({ctrlSolde})
+    this.basketSoldeSource.next({ ctrlSolde })
   }
 
   private addOrUpdateItem(items: IBasketItem[], itemToAdd: IBasketItem): IBasketItem[] {
@@ -100,12 +137,6 @@ export class BasketService {
       items[index].tAccount = itemToAdd.tAccount;
     }
     return items;
-  }
-
-  private createBasket(): IBasket {
-    const basket = new Basket();
-    localStorage.setItem('ledgerEntry_id', basket.id);
-    return basket;
   }
 
   private mapEntryItemToBasketItem(item: IBasketItem): IBasketItem {
@@ -132,11 +163,24 @@ export class BasketService {
   }
 
   deleteBasket(basket: IBasket) {
-    return this.http.delete(this.baseUrl + 'ledgerentry?id=' + basket.id).subscribe(() => {
-      this.basketSource.next(null);
-      localStorage.removeItem('ledgerEntry_id');
-    }, error => {
-      console.log(error);
-    });
+    // LOCALSTORE !!
+    return this.http
+      .get('assets/dummy.txt', {
+        responseType: 'text',
+      })
+      .subscribe(() => {
+        this.basketSource.next(null);
+        localStorage.removeItem('ledgerEntry_id');
+        localStorage.removeItem(basket.id);
+      });
+
+    // REDIS !!
+    /* return this.http
+        .delete(this.baseUrl + 'ledgerentry?id=' + basket.id).subscribe(() => {
+          this.basketSource.next(null);
+          localStorage.removeItem('ledgerEntry_id');
+        }, error => {
+          console.log(error);
+      }); */
   }
 }
